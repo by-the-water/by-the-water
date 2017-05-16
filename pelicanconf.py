@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
+THEME = 'themes/pelican-blue'
+
 AUTHOR = 'By-the-water'
 SITENAME = "By-the-water's Blog"
 SITEURL = ''

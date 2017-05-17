@@ -43,7 +43,7 @@ DEFAULT_PAGINATION = 10
                        
 # DISPLAY_PAGES_ON_MENU = True
 
-DISQUS_SITENAME = 'https://by-the-water.github.io/'
+DISQUS_SITENAME = 'https-by-the-water-github-io'
 
 # all the following settings are *optional*
 

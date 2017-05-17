@@ -7,8 +7,7 @@ THEME = 'themes/blue-penguin'
 AUTHOR = 'By-the-water'
 SITENAME = "By the Water"
 SITESUBTITLE = 'Geoscience, Oil & Gas, AI'
-SITEURL = ''
-#'https://by-the-water.github.io'
+SITEURL = 'https://by-the-water.github.io'
 
 GOOGLE_ANALYTICS = u'UA-99319293-1'
 
@@ -99,7 +98,7 @@ SITEMAP = {
 		}, 
 	'changefreqs': { 
 		'articles': 'always', 
-		'indexes': 'hourly', 
+		'indexes': 'daily', 
 		'pages': 'monthly' 
 		} 
 	}

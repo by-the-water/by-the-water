@@ -10,6 +10,8 @@ SITESUBTITLE = 'Geoscience, Oil & Gas, AI'
 SITEURL = ''
 #'https://by-the-water.github.io'
 
+GOOGLE_ANALYTICS = u'UA-99319293-1'
+
 PATH = 'content'
 
 TIMEZONE = 'America/Chicago'
@@ -83,3 +85,21 @@ MENUITEMS = (
 # URLs
 ARTICLE_URL = 'posts/{date:%Y}/{date:%m}/{date:%d}/{slug}.html'
 ARTICLE_SAVE_AS = 'posts/{date:%Y}/{date:%m}/{date:%d}/{slug}.html'
+
+# Plugins
+PLUGIN_PATHS = [u'plugins']
+PLUGINS = [u'sitemap']
+# Configuration for the "sitemap" plugin 
+SITEMAP = { 
+	'format': 'xml', 
+	'priorities': { 
+		'articles': 1, 
+		'indexes': 0.5, 
+		'pages': 0.5, 
+		}, 
+	'changefreqs': { 
+		'articles': 'always', 
+		'indexes': 'hourly', 
+		'pages': 'monthly' 
+		} 
+	}

@@ -16,12 +16,14 @@ If you are familiar with setting up Jupyter Notebook servers on AWS, you first n
 For those who are not very familiar with all these process, you can follow my brief tutorial as follows.
 
 **Assign Public IP**
+
 In your Paperspace console, the Public IP can be assigned at
 ![01](../../../../images/2017/05/16/01.PNG)
 This is the IP you can connect to your virtual machine through ssh and browser.
 
 
 **Setting Jupyter Notebook Server**
+
 We can set up the server following the [official doc]() of jupyter notebook as follows. 
 Open a terminal in your console as shown in the following plot. you will be asked for the password to log in, which must have been sent to your registered email.
 ![02](../../../../images/2017/05/16/02.PNG)
@@ -57,6 +59,7 @@ We need to set up the paths of our certificate files and the hashed password in 
 Save the file and exit from the editor. The notebook server is ready to run.
 
 **Allow UFW port access**
+
 In order to access notebook server from our browser, we have to set UFW to allow us accessing the port of the notebook server. This can be done with the following command.
 
 	sudo ufw allow [your notebook server port]
@@ -66,5 +69,5 @@ All set! Now use this address to access your server.
 
 	<em>https://[your public IP]:[your port]</em>
 
-If it is your first time seeing the following page, click 'ADVANCED' then 'Processd to ....', type in your password for the note book server. Enjoy!
+If it is your first time seeing the following page, click 'ADVANCED' then 'Processd to ....', type in your password for the notebook server. Enjoy!
 ![03](../../../../images/2017/05/16/03.PNG)

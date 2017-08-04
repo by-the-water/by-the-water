@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>A Pelican Blog</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog </a></h1>
+                <nav><ul>
+                    <li><a href="/pages/about.html">About Me</a></li>
+                    <li><a href="/category/programming.html">Programming</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/Setting-up-a-jupyter-notebook-server-on-paperspace.html">Setting up a jupyter notebook server on paperspace</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-05-16T22:20:00">
+                Tue 16 May 2017
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="/author/by-the-water.html">By-the-water</a>
+        </address>
+<p>In <a href="/category/programming.html">Programming</a>. </p>
+
+</footer><!-- /.post-info --><p>I have been using AWS for Kaggle and for problems of my personal interests. The AWS spot instances are convenient and affordable for individuals in most situations except for deep learning. The costs easily ramp up to $1.00 per hour when I ran a g2.2xlarge instance set up with the deep learning AMI and with sufficient storage. In this case, Paperspace is a good and affordable alternative to AWS.</p>
+<p>Just like AWS, <a href="https://paperspace.zendesk.com/hc/en-us/articles/216032308-What-is-Paperspace-">paperspace</a> provides access to persistent cloud-based virtual machines, but at a much affordable prices. For machine learning applications, I can choose from two <a href="https://www.paperspace.com/pricing">options</a> at the time this post was written. The GPU+ option charges $0.4 per hour along with $5.00 for 50GB per month for the storage, and it comes with 8 CPUs, 30GB RAM, and a 8GB Quadro M4000 GPU. This is fairly sufficient for my purpose. Following this detailed <a href="https://blog.paperspace.com/cpu-instances/">tutorial</a>, we can easily set up a virtual machine with Ubuntu and major deep learning packages installed.</p>
+<p>By default, we can access both the desktop and the terminal of our virtual machine on our browser. This works very well. I feel no difference for using Jupyter Notebook in a virtual desktop within the browser on a 24' monitor. However, the font size and mouse response lag become a challenge on my Lenovo X1 Yoga. I think I still need a Jupyter Notebook server for the advantages of my eyes, and it turns to be contents in this post.</p>
+<p>You first need to assign a public IP to your virtual paperspace machine, then set up the Jupyter Notebook server as you are in AWS, and allow connections to your port in order to access your server in the browser.</p>
+<p>For those who are not very familiar with all these process, you can follow my brief tutorial as follows.</p>
+<p><strong>Assign Public IP</strong></p>
+<p>In your paperspace console, the Public IP can be assigned at
+<img alt="01" src="../../../images/2017/05/16/01.PNG" />
+This is the IP you can connect to your virtual machine through ssh and browser.</p>
+<p><strong>Setting Jupyter Notebook Server</strong></p>
+<p>We can set up the server following the <a href="http://jupyter-notebook.readthedocs.io/en/latest/public_server.html">official doc</a> of jupyter notebook as follows:</p>
+<p>Open a terminal in your console as shown in the following plot. you will be asked for the password to log in, which has been sent to your registered email.
+<img alt="02" src="../../../images/2017/05/16/02.PNG" />
+If you don't have one already, generate a default notebook configuration file <em>~/.jupyter/jupyter_notebook_config.py</em>.</p>
+<div class="highlight"><pre><span class="o">:~</span><span class="err">$</span> <span class="n">jupyter</span> <span class="n">notebook</span> <span class="o">--</span><span class="n">generate</span><span class="o">-</span><span class="n">config</span>
+</pre></div>
+
+
+<p>Before modifying the notebook configuration, we need to generate a hashed password. As of notebook version 5.0, we can enter and store a password with a one-line command as follows.</p>
+<div class="highlight"><pre><span class="o">:~</span><span class="err">$</span> <span class="n">jupyter</span> <span class="n">notebook</span> <span class="n">password</span>
+<span class="n">Enter</span> <span class="n">password</span><span class="o">:</span> 
+<span class="n">Verify</span> <span class="n">password</span><span class="o">:</span>
+<span class="p">[</span><span class="n">NotebookPasswordApp</span><span class="p">]</span> <span class="n">Wrote</span> <span class="n">hashed</span> <span class="n">password</span> <span class="n">to</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">paperspace</span><span class="o">/</span><span class="p">.</span><span class="n">jupyter</span><span class="o">/</span><span class="n">jupyter_notebook_config</span><span class="p">.</span><span class="n">json</span>
+</pre></div>
+
+
+<p>Create a directory, and generate a self-signed certificate </p>
+<div class="highlight"><pre><span class="o">:~</span><span class="err">$</span> <span class="n">mkdir</span> <span class="n">cert</span>
+<span class="o">:~</span><span class="err">$</span> <span class="n">cd</span> <span class="n">cert</span>
+<span class="o">:~/</span><span class="n">cert</span><span class="err">$</span> <span class="n">openssl</span> <span class="n">req</span> <span class="o">-</span><span class="n">x509</span> <span class="o">-</span><span class="n">nodes</span> <span class="o">-</span><span class="n">days</span> <span class="mi">365</span> <span class="o">-</span><span class="n">newkey</span> <span class="n">rsa</span><span class="o">:</span><span class="mi">1024</span> <span class="o">-</span><span class="n">keyout</span> <span class="n">mykey</span><span class="p">.</span><span class="n">key</span> <span class="o">-</span><span class="n">out</span> <span class="n">mycert</span><span class="p">.</span><span class="n">pem</span>
+</pre></div>
+
+
+<p>We need to set up the paths of our certificate files and the hashed password in the notebook configuration file. We can use Vi in a terminal or use whatever editor we like in the in-browser desktop to open the file <em>~/.jupyter/jupyter_notebook_config.py</em>. We are going to add following settings to the beginning of the file.</p>
+<div class="highlight"><pre><span class="cp"># Set options for certfile, ip, password, and toggle off</span>
+<span class="cp"># browser auto-opening</span>
+<span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">certfile</span> <span class="o">=</span> <span class="n">u</span><span class="err">&#39;</span><span class="o">/</span><span class="n">absolute</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">your</span><span class="o">/</span><span class="n">certificate</span><span class="o">/</span><span class="n">mycert</span><span class="p">.</span><span class="n">pem</span><span class="err">&#39;</span>
+<span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">keyfile</span> <span class="o">=</span> <span class="n">u</span><span class="err">&#39;</span><span class="o">/</span><span class="n">absolute</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">your</span><span class="o">/</span><span class="n">certificate</span><span class="o">/</span><span class="n">mykey</span><span class="p">.</span><span class="n">key</span><span class="err">&#39;</span>
+<span class="cp"># Set ip to &#39;*&#39; to bind on all interfaces (ips) for the public server</span>
+<span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">ip</span> <span class="o">=</span> <span class="sc">&#39;*&#39;</span>
+<span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">u</span><span class="err">&#39;</span><span class="n">your</span> <span class="n">hashed</span> <span class="n">password</span> <span class="n">in</span> <span class="n">the</span> <span class="p">.</span><span class="n">json</span> <span class="n">file</span> <span class="n">in</span> <span class="n">this</span> <span class="n">folder</span><span class="err">&#39;</span>
+<span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">open_browser</span> <span class="o">=</span> <span class="n">False</span>
+
+<span class="cp"># It is a good idea to set a known, fixed port for server access</span>
+<span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="p">[</span><span class="n">your</span> <span class="n">choice</span> <span class="n">of</span> <span class="n">port</span> <span class="n">number</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span> <span class="mi">9999</span><span class="p">]</span>
+</pre></div>
+
+
+<p>Save the file and exit from the editor. The notebook server is ready to run.</p>
+<p><strong>Allow UFW port access</strong></p>
+<p>In order to access notebook server from our browser, we have to set UFW to allow us accessing the port of the notebook server. This can be done with the following command.</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">ufw</span> <span class="n">allow</span> <span class="p">[</span><span class="n">your</span> <span class="n">notebook</span> <span class="n">server</span> <span class="n">port</span><span class="p">]</span>
+</pre></div>
+
+
+<p>We will re-enter our linux password at here.</p>
+<p>All set! Now use this address to access your server. </p>
+<div class="highlight"><pre><span class="nl">https:</span><span class="c1">//[your public IP]:[your port]</span>
+</pre></div>
+
+
+<p>If it is your first time seeing the following page, click 'ADVANCED' then 'Processd to ....', type in your password for the notebook server. Enjoy!
+<img alt="03" src="../../../images/2017/05/16/03.PNG" /></p>                </article>
+            </aside><!-- /#featured -->
+            </ol><!-- /#posts-list -->
+            </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

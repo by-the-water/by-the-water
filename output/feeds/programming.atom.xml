@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>By the Water - Programming</title><link href="https://by-the-water.github.io/" rel="alternate"></link><link href="https://by-the-water.github.io/feeds/programming.atom.xml" rel="self"></link><id>https://by-the-water.github.io/</id><updated>2017-05-16T22:20:00-05:00</updated><entry><title>Setting up a jupyter notebook server on paperspace</title><link href="https://by-the-water.github.io/posts/2017/05/16/Setting-up-a-jupyter-notebook-server-on-paperspace.html" rel="alternate"></link><published>2017-05-16T22:20:00-05:00</published><updated>2017-05-16T22:20:00-05:00</updated><author><name>By-the-water</name></author><id>tag:by-the-water.github.io,2017-05-16:/posts/2017/05/16/Setting-up-a-jupyter-notebook-server-on-paperspace.html</id><summary type="html">&lt;p&gt;A brief tutorial on how to set up a Jupyter Notebook server on Paperspace.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using AWS for Kaggle and for problems of my personal interests. The AWS spot instances are convenient and affordable for individuals in most situations except for deep learning. The costs easily ramp up to $1.00 per hour when I ran a g2.2xlarge instance set up with the deep learning AMI and with sufficient storage. In this case, Paperspace is a good and affordable alternative to AWS.&lt;/p&gt;
+&lt;p&gt;Just like AWS, &lt;a href="https://paperspace.zendesk.com/hc/en-us/articles/216032308-What-is-Paperspace-"&gt;paperspace&lt;/a&gt; provides access to persistent cloud-based virtual machines, but at a much affordable prices. For machine learning applications, I can choose from two &lt;a href="https://www.paperspace.com/pricing"&gt;options&lt;/a&gt; at the time this post was written. The GPU+ option charges $0.4 per hour along with $5.00 for 50GB per month for the storage, and it comes with 8 CPUs, 30GB RAM, and a 8GB Quadro M4000 GPU. This is fairly sufficient for my purpose. Following this detailed &lt;a href="https://blog.paperspace.com/cpu-instances/"&gt;tutorial&lt;/a&gt;, we can easily set up a virtual machine with Ubuntu and major deep learning packages installed.&lt;/p&gt;
+&lt;p&gt;By default, we can access both the desktop and the terminal of our virtual machine on our browser. This works very well. I feel no difference for using Jupyter Notebook in a virtual desktop within the browser on a 24' monitor. However, the font size and mouse response lag become a challenge on my Lenovo X1 Yoga. I think I still need a Jupyter Notebook server for the advantages of my eyes, and it turns to be contents in this post.&lt;/p&gt;
+&lt;p&gt;You first need to assign a public IP to your virtual paperspace machine, then set up the Jupyter Notebook server as you are in AWS, and allow connections to your port in order to access your server in the browser.&lt;/p&gt;
+&lt;p&gt;For those who are not very familiar with all these process, you can follow my brief tutorial as follows.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Assign Public IP&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;In your paperspace console, the Public IP can be assigned at
+&lt;img alt="01" src="../../../images/2017/05/16/01.PNG"&gt;
+This is the IP you can connect to your virtual machine through ssh and browser.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Setting Jupyter Notebook Server&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We can set up the server following the &lt;a href="http://jupyter-notebook.readthedocs.io/en/latest/public_server.html"&gt;official doc&lt;/a&gt; of jupyter notebook as follows:&lt;/p&gt;
+&lt;p&gt;Open a terminal in your console as shown in the following plot. you will be asked for the password to log in, which has been sent to your registered email.
+&lt;img alt="02" src="../../../images/2017/05/16/02.PNG"&gt;
+If you don't have one already, generate a default notebook configuration file &lt;em&gt;~/.jupyter/jupyter_notebook_config.py&lt;/em&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;:~$ jupyter notebook --generate-config
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Before modifying the notebook configuration, we need to generate a hashed password. As of notebook version 5.0, we can enter and store a password with a one-line command as follows.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;:~$ jupyter notebook password
+Enter password: 
+Verify password:
+[NotebookPasswordApp] Wrote hashed password to /home/paperspace/.jupyter/jupyter_notebook_config.json
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Create a directory, and generate a self-signed certificate &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;:~$ mkdir cert
+:~$ cd cert
+:~/cert$ openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mykey.key -out mycert.pem
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We need to set up the paths of our certificate files and the hashed password in the notebook configuration file. We can use Vi in a terminal or use whatever editor we like in the in-browser desktop to open the file &lt;em&gt;~/.jupyter/jupyter_notebook_config.py&lt;/em&gt;. We are going to add following settings to the beginning of the file.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# Set options for certfile, ip, password, and toggle off
+# browser auto-opening
+c.NotebookApp.certfile = u&amp;#39;/absolute/path/to/your/certificate/mycert.pem&amp;#39;
+c.NotebookApp.keyfile = u&amp;#39;/absolute/path/to/your/certificate/mykey.key&amp;#39;
+# Set ip to &amp;#39;*&amp;#39; to bind on all interfaces (ips) for the public server
+c.NotebookApp.ip = &amp;#39;*&amp;#39;
+c.NotebookApp.password = u&amp;#39;your hashed password in the .json file in this folder&amp;#39;
+c.NotebookApp.open_browser = False
+
+# It is a good idea to set a known, fixed port for server access
+c.NotebookApp.port = [your choice of port number, e.g. 9999]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Save the file and exit from the editor. The notebook server is ready to run.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Allow UFW port access&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;In order to access notebook server from our browser, we have to set UFW to allow us accessing the port of the notebook server. This can be done with the following command.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo ufw allow [your notebook server port]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We will re-enter our linux password at here.&lt;/p&gt;
+&lt;p&gt;All set! Now use this address to access your server. &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nl"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//[your public IP]:[your port]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If it is your first time seeing the following page, click 'ADVANCED' then 'Processd to ....', type in your password for the notebook server. Enjoy!
+&lt;img alt="03" src="../../../images/2017/05/16/03.PNG"&gt;&lt;/p&gt;</content></entry></feed>

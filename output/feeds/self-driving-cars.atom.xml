@@ -1,5 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>By the water - Deep learning</title><link href="/" rel="alternate"></link><link href="/feeds/deep-learning.atom.xml" rel="self"></link><id>/</id><updated>2017-08-02T21:18:00-05:00</updated><entry><title>Traffic sign recognition with ConvNet</title><link href="/posts/2017/08/02/traffic-sign-recognition.html" rel="alternate"></link><published>2017-08-02T21:18:00-05:00</published><updated>2017-08-02T21:18:00-05:00</updated><author><name>By-the-water</name></author><id>tag:None,2017-08-02:/posts/2017/08/02/traffic-sign-recognition.html</id><summary type="html">&lt;p&gt;In this project, a classifier to recognize traffic sign was built based on Convolutional Neural Networks, which is a project of the Udacity Self-driving Cars Nanodegree program. The model was trained on a fraction of the German Traffic Sign dataset, which is provided as pickled files by the Self-driving car program. The final validation accuracy of our model was 97%, and the test accuracy was 98%. Six images downloaded from the internet were also used to test the model, and a accuracy of 66.7% was achieved.&lt;/p&gt;</summary><content type="html">&lt;h1&gt;&lt;strong&gt;Traffic Sign Recognition&lt;/strong&gt;&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>By the water - Self-driving Cars</title><link href="/" rel="alternate"></link><link href="/feeds/self-driving-cars.atom.xml" rel="self"></link><id>/</id><updated>2017-09-17T23:55:00-05:00</updated><entry><title>Behavioral cloning</title><link href="/posts/2017/09/17/behavioral-cloning.html" rel="alternate"></link><published>2017-09-17T23:55:00-05:00</published><updated>2017-09-17T23:55:00-05:00</updated><author><name>By-the-water</name></author><id>tag:None,2017-09-17:/posts/2017/09/17/behavioral-cloning.html</id><summary type="html">&lt;p&gt;This is my work for the Behavioral Cloning project of the Udacity Self-driving Cars Nanodegree. A ConvNet-based model was built to autonomously predict steering of a simulated car. The architecture of this model is based on &lt;a href="http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf"&gt;Nvidia's End to End Learning for Self-Driving Cars&lt;/a&gt;. However, several adjustments have been made on the architecture to improve the performance on my dataset, and were documented in this documented. Although Udacity has provided some data, I decided to collect my own dataset using Udacity's &lt;a href="https://github.com/udacity/self-driving-car-sim"&gt;car simulator&lt;/a&gt;. In this project, I have generated a very small dataset of 2700 images on purpose, and augmented it with several data augmentation strategies to train my model. My model has been tested on the basic track provided in the simulator, indicating that data augmentatation can stretch the limit of a small dataset. Results of the model are shown below. This model does not make too far on the challenge track, which is longer and with more sharp turnings. Data augmentataion cannot help on this complex problem, and a much larger dataset are required.&lt;/p&gt;</summary><content type="html">&lt;h1&gt;&lt;strong&gt;Udacity Self-driving Cars NanoDegree Project 3: Behavioral Cloning&lt;/strong&gt;&lt;/h1&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;This is my work for the Behavioral Cloning project of the Udacity Self-driving Cars Nanodegree. A ConvNet-based model was built to autonomously predict steering of a simulated car. The architecture of this model is based on &lt;a href="http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf"&gt;Nvidia's End to End Learning for Self-Driving Cars&lt;/a&gt;. However, several adjustments have been made on the architecture to improve the performance on my dataset, and were documented in this documented. Although Udacity has provided some data, I decided to collect my own dataset using Udacity's &lt;a href="https://github.com/udacity/self-driving-car-sim"&gt;car simulator&lt;/a&gt;. In this project, I have generated a very small dataset of 2700 images on purpose, and augmented it with several data augmentation strategies to train my model. My model has been tested on the basic track provided in the simulator, indicating that data augmentatation can stretch the limit of a small dataset. Results of the model are shown below. This model does not make too far on the challenge track, which is longer and with more sharp turnings. Data augmentataion cannot help on this complex problem, and a much larger dataset are required.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://youtu.be/Q-5QoDszvWQ"&gt;&lt;img alt="Lake Track" src="../../../../images/2017/09/17/raw_center.png"&gt;&lt;/a&gt;
+&lt;a href="https://youtu.be/Q-5QoDszvWQ"&gt;YouTube Link&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;Project Description&lt;/h2&gt;
+&lt;p&gt;This project includes:
+&lt;em&gt; Data Collection and Preprocessing
+&lt;/em&gt; Data Augmentation
+&lt;em&gt; Model Architecture
+&lt;/em&gt; Model Training
+* Discussion&lt;/p&gt;
+&lt;h3&gt;Quick Start&lt;/h3&gt;
+&lt;p&gt;The environment for this project can be installed following Udacity's &lt;a href="https://github.com/udacity/CarND-Term1-Starter-Kit"&gt;CarND Term1 Starter Kit&lt;/a&gt;. Following files are used to build this model:
+&lt;em&gt; model.py: build the model
+&lt;/em&gt; drive.py: run a pretrained model
+&lt;em&gt; util.py: functions defined for preprocessing and image augmentation
+&lt;/em&gt; model.h5: my pretrained model&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Run the pretrained model&lt;/strong&gt;
+Start Udacity's car simulator, choose the basic track and the Autonomous Mode. The simulated car will be ready in the track. Then open a terminal and run the model using&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;drive&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="nb"&gt;file&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A preliminary versioin of drive.py was provided by Udacity, but I have added a line with image cropping.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Train the model&lt;/strong&gt;
+To train the model, the path to the training data set must be set for the list &lt;code&gt;path&lt;/code&gt; in &lt;code&gt;model.py&lt;/code&gt;. Once path has been set, just run the model with&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr&gt;
+&lt;h3&gt;Data Collection and Preprocessing&lt;/h3&gt;
+&lt;p&gt;We can collect data using the Training Mode of the simulator by capturing photos from three cameras set on the simulated car. The total numbers of images captured for each tracks are listed in the table below. This is a very small dataset, but I have tried to maximize the value of this dataset with image augmentation. This got the model to work on the basic track, but did not make too far on the challenge track with many sharp turnings.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tracks&lt;/th&gt;
+&lt;th&gt;Number of Images&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Track 1&lt;/td&gt;
+&lt;td&gt;2787&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The steering angle of the center camera was recorded along with the photos. Examples of pictures of three cameras taken at the same time are shown below.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;Left Camera&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Center Camera&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Right Camera&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img alt="alt text" src="../../../../images/2017/09/17/raw_left.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img alt="alt text" src="../../../../images/2017/09/17/raw_center.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img alt="alt text" src="../../../../images/2017/09/17/raw_right.png"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;I only collect photos fron three to four rounds on the track, since image augmentation will be applied. While driving on the track, I constantly changed the car from the border of the track to the center. More data steering the car back to the center were recorded in this way. The images have been cropped to focus on the road, and resized to reduce the dimension of the data. The cropped center image above is shown below. In addition, a normalization layer was set in the model to normalize the input image.&lt;/p&gt;
+&lt;p&gt;&lt;img src="../../../../images/2017/09/17/cropped_center.png" width = 500&gt;&lt;/p&gt;
+&lt;h3&gt;Data Augmentation&lt;/h3&gt;
+&lt;p&gt;Several strategies have been applied on the original images to increase the size of our samples and to generalize our data for cases such as sharp turnings. The strategies used are listed below.
+* Use of images from the left and right camera. A image was randomly selected from the center, left, and right images captured at the same time. Since the images have been shifted, steering correction has been applied by adding 0.2 to the left image and subtracting 0.2 from the right image.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The selected image was randomly flipped. The trained model tended to drive on the left side of the track without flipped data, since the data was collected while driving clockwise on the track.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="../../../../images/2017/09/17/flipped_center.png" width = 500&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;We randomly shifted the data horizontally and vertically. This strategy is equavallent to increasing more sharp turning data. The steering angle of a shifted image must be corrected. In this project, I assume that the correction is linearly correlated to the horizontal offset.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="../../../../images/2017/09/17/translated_center.png" width = 500&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The brightness of the image has been added in order to avoid overfitting on the data.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="../../../../images/2017/09/17/dim_center.png" width = 500&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A Gaussian noise has also been added to avoid overfitting.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="../../../../images/2017/09/17/gNoise_center.png" width = 500&gt;&lt;/p&gt;
+&lt;h3&gt;Model Architecture&lt;/h3&gt;
+&lt;p&gt;My network is based on the architecture of &lt;a href="https://github.com/udacity/CarND-Term1-Starter-Kit"&gt;Nvidia's End to End Learning for Self-Driving Cars&lt;/a&gt;. However, several adjustments have been made in order to improve the results on my dataset.
+&lt;em&gt; The input images were converted in HSV plane rather than YUV suggested in the paper
+&lt;/em&gt; The input image resolution is 64x200x3
+&lt;em&gt; Maxpooling layers were used insteal of subsampling in convolutional layers
+&lt;/em&gt; Same padding was used instead of valid padding
+&lt;em&gt; A dropout layer was added between the flattened layer to the fully-connected layers
+&lt;/em&gt; Numbers of parameters were increated in fully-connected layers, since I have more parameters out of the convolutional layers than the original architecture&lt;/p&gt;
+&lt;p&gt;My final architecture is documented below. Based on my experiments, it is important to ensure that no pooling or subsampling has been applied following the last two convolutional layers in order to get a significant improvement on the performance.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Layer&lt;/th&gt;
+&lt;th&gt;Output Shape&lt;/th&gt;
+&lt;th&gt;Number&lt;/th&gt;
+&lt;th&gt;Connected to&lt;/th&gt;
+&lt;th&gt;Filter size&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;lambda layer&lt;/td&gt;
+&lt;td&gt;(None, 64, 200,  3)&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;Input layer&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Convolution2D&lt;/td&gt;
+&lt;td&gt;(None, 64, 200, 24)&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MaxPooling2D&lt;/td&gt;
+&lt;td&gt;(None, 32, 100, 24)&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Convolution2D&lt;/td&gt;
+&lt;td&gt;(None, 32, 100, 36)&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MaxPooling2D&lt;/td&gt;
+&lt;td&gt;(None, 16,  50, 36)&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Convolution2D&lt;/td&gt;
+&lt;td&gt;(None, 16,  50, 48)&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MaxPooling2D&lt;/td&gt;
+&lt;td&gt;(None,  8,  25, 48)&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Convolution2D&lt;/td&gt;
+&lt;td&gt;(None,  8,  25, 64)&lt;/td&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Convolution2D&lt;/td&gt;
+&lt;td&gt;(None,  8,  25, 64)&lt;/td&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Flatten layer&lt;/td&gt;
+&lt;td&gt;(None, 12800)&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Dropout&lt;/td&gt;
+&lt;td&gt;(None, 12800)&lt;/td&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;dense_1 (Dense)&lt;/td&gt;
+&lt;td&gt;(None, 1000)&lt;/td&gt;
+&lt;td&gt;12&lt;/td&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;dense_2 (Dense)&lt;/td&gt;
+&lt;td&gt;(None, 500)&lt;/td&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;12&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;dense_3 (Dense)&lt;/td&gt;
+&lt;td&gt;(None, 100)&lt;/td&gt;
+&lt;td&gt;14&lt;/td&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;dense_4 (Dense)&lt;/td&gt;
+&lt;td&gt;(None, 1)&lt;/td&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;14&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;Model Training&lt;/h3&gt;
+&lt;p&gt;Sine this dataset is small, I did not split it to training and validation set. The training and validation generators were both created with all of the images on the basic track. Since each of the image will be stochastically augmented, my assumption is that I can stochstically generate a traning set and a validation set with the generators. The training:validation ratio is 4:1. The model was tested on the simulator, and works for the simple basic track. However, this strategy only works for simple tracks. For the complex challenge track, much more data are required to train a valid model.&lt;/p&gt;
+&lt;p&gt;Hyperparameters for training are documented below:
+&lt;em&gt; The training data size is chosen to be around 20000. This gives the best performance in combination with the batch size of 128
+&lt;/em&gt; My best model is obtained after 20 epochs
+* &lt;a href="https://arxiv.org/pdf/1412.6980v8.pdf"&gt;The Adaptive Momentum Estimation (Adam)&lt;/a&gt; optimizer is chosen for the training. Adam updates every parameter in the model with an individual learning rate, which has simplified the tuning for learning rate. In the project, we chose a relatively fast learning rate 1e-3, and let Adam to adapt themselves through the training process. We don't need to worry about the learning rate decay with Adam. The training loss and validation loss are shown below. The initial training loss is very large, because I have assigned a high learning rate. Since Adam has adjusted every weight individually, training loss and validation loss are similar starting from the second epoch.&lt;/p&gt;
+&lt;p&gt;&lt;img src="../../../../images/2017/09/17/model_history.png" width = 500&gt;&lt;/p&gt;
+&lt;h3&gt;Discussion&lt;/h3&gt;
+&lt;p&gt;A small data set of the basic track have been used to train my networks with augmentation, and the model works on this track. However, using a small dataset for the challenge track, which is much longer and consists of more sharp turnings, does not generate a valid model. More data are required for this complex track.&lt;/p&gt;</content></entry><entry><title>Traffic sign recognition with ConvNet</title><link href="/posts/2017/08/02/traffic-sign-recognition.html" rel="alternate"></link><published>2017-08-02T21:18:00-05:00</published><updated>2017-08-02T21:18:00-05:00</updated><author><name>By-the-water</name></author><id>tag:None,2017-08-02:/posts/2017/08/02/traffic-sign-recognition.html</id><summary type="html">&lt;p&gt;In this project, a classifier to recognize traffic sign was built based on Convolutional Neural Networks, which is a project of the Udacity Self-driving Cars Nanodegree program. The model was trained on a fraction of the German Traffic Sign dataset, which is provided as pickled files by the Self-driving car program. The final validation accuracy of our model was 97%, and the test accuracy was 98%. Six images downloaded from the internet were also used to test the model, and a accuracy of 66.7% was achieved.&lt;/p&gt;</summary><content type="html">&lt;h1&gt;&lt;strong&gt;Traffic Sign Recognition&lt;/strong&gt;&lt;/h1&gt;
 &lt;h2&gt;Summary&lt;/h2&gt;
 &lt;h3&gt;In this project, a classifier to recognize traffic sign was built based on Convolutional Neural Networks, which is a project of the Udacity Self-driving Cars Nanodegree program. The model was trained on a fraction of the German Traffic Sign dataset, which is provided as pickled files by the Self-driving car program. The final validation accuracy of our model was 97%, and the test accuracy was 98%. Six images downloaded from the internet were also used to test the model, and a accuracy of 66.7% was achieved.&lt;/h3&gt;
 &lt;hr&gt;

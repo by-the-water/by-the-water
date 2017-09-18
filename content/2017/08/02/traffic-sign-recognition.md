@@ -2,7 +2,7 @@ Author: By-the-water
 Title: Traffic sign recognition with ConvNet
 Date: 2017-08-02 21:18
 Slug: traffic-sign-recognition
-Category: Deep learning
+Category: Self-driving Cars
 Summary: In this project, a classifier to recognize traffic sign was built based on Convolutional Neural Networks, which is a project of the Udacity Self-driving Cars Nanodegree program. The model was trained on a fraction of the German Traffic Sign dataset, which is provided as pickled files by the Self-driving car program. The final validation accuracy of our model was 97%, and the test accuracy was 98%. Six images downloaded from the internet were also used to test the model, and a accuracy of 66.7% was achieved.
 
 #**Traffic Sign Recognition**
